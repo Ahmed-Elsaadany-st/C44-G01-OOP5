@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace OOPAssignment05
@@ -53,6 +54,7 @@ namespace OOPAssignment05
                    this.Minutes == other.Minutes &&
                    this.Seconds == other.Seconds;
         }
+        #region Binary Operators Overloadign
         public static TimeDetails operator +(TimeDetails left, TimeDetails right)
         {
             return new TimeDetails
@@ -79,10 +81,13 @@ namespace OOPAssignment05
             };
         }
 
+        #endregion
+        #region Unary Operators Overloadign
         public static TimeDetails operator ++(TimeDetails timeDetails)
         {
             if (timeDetails == null) throw new ArgumentNullException("invalid object");
-            else {
+            else
+            {
                 return new TimeDetails()
                 {
                     Hours = timeDetails.Hours,
@@ -101,6 +106,8 @@ namespace OOPAssignment05
                 Seconds = timeDetails?.Seconds ?? 0
             };
         }
+        #endregion
+        #region Relational Operators Overloadign
         public static bool operator >(TimeDetails? left, TimeDetails? right)
         {
             if (left is null && right is null) return false;
@@ -126,11 +133,35 @@ namespace OOPAssignment05
 
         public static bool operator >=(TimeDetails? left, TimeDetails? right)
         {
-          if(left is null && right is null) return true;
-          if (left is null) return false;
-          if (right is null) return true;
-          return left.TotlaTimeInSeconds()>= right.TotlaTimeInSeconds();
+            if (left is null && right is null) return true;
+            if (left is null) return false;
+            if (right is null) return true;
+            return left.TotlaTimeInSeconds() >= right.TotlaTimeInSeconds();
         }
+        #endregion
+        #region Casting Operators Overloadign
+        public static explicit operator DateTime(TimeDetails? value)
+        {
+            if (value is not null)
+            {
+                return new DateTime
+                    (year: DateTime.Now.Year,
+                    month: DateTime.Now.Month,
+                    day: DateTime.Now.Day,
+                    hour: (int)value.Hours,
+                    minute: (int)value.Minutes,
+                    second: (int)value.Seconds
+                    );
+
+
+
+
+            }
+            throw new ArgumentNullException(nameof(value), "Cannot convert null TimeDetails to DateTime.");
+
+        }
+
+        #endregion
     }
 
 }
